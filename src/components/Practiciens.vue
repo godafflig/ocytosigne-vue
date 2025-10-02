@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div class="praticiens-grid">
+  <div class="praticiens-grid">
       <div v-if="loading" class="loading-state">
         <p>🔄 Chargement des praticiens...</p>
       </div>
@@ -32,8 +32,8 @@
       </div>
 
       <div 
-        v-for="practitioner in practitioners" 
-        :key="practitioner.id" 
+        v-for="(practitioner, idx) in practitioners" 
+        :key="practitioner.id ?? `p-${idx}`" 
         class="praticien-card"
       >
         <div class="praticien-header">
@@ -70,8 +70,8 @@
         </div>
 
         <div class="details">
-          <p class="info rating">
-            <i class="fa-solid fa-star"></i> {{ practitioner.rating }} ({{ practitioner.reviews }} avis)
+          <p v-if="(practitioner.rating && practitioner.rating > 0) || (practitioner.reviews && practitioner.reviews > 0)" class="info rating">
+            <i class="fa-solid fa-star"></i> {{ practitioner.rating }}<span v-if="practitioner.reviews"> ({{ practitioner.reviews }} avis)</span>
           </p>
           <p class="info">
             <i class="fa-solid fa-location-dot"></i> {{ practitioner.addressText || practitioner.location }}
@@ -202,15 +202,22 @@ const fetchPractitioners = async () => {
       throw new Error('Supabase non configuré')
     }
     // Utilise une Edge Function pour agréger les données (join profiles)
-    const { data: fnData, error: fnError } = await supabase.functions.invoke('get_practitioner', {
-      body: { limit: 30 }
-    })
-
-    if (fnError) {
-      throw fnError
+    // Tolère les deux noms possibles (get_practitioner / get_practioner)
+    const candidates = ['get_practitioner', 'get_practioner']
+    let rows = []
+    let lastError = null
+    for (const name of candidates) {
+      const { data: fnData, error: fnError } = await supabase.functions.invoke(name, {
+        body: { limit: 30 }
+      })
+      if (!fnError && fnData) {
+        rows = fnData?.data || []
+        lastError = null
+        break
+      }
+      lastError = fnError || new Error(`Edge function ${name} has returned no data`)
     }
-
-    const rows = fnData?.data || []
+    if (lastError) throw lastError
 
     practitioners.value = rows.map((row) => {
       const p = row || {}

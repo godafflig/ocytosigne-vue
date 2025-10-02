@@ -23,18 +23,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: node:22.12.0
+    env:
+      # Option B (partie 1): on charge d'abord les Secrets dans l'environnement
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Fallback to Repository Variables if secrets missing
+        run: |
+          if [ -z "${VITE_SUPABASE_URL}" ] && [ -n "${{ vars.VITE_SUPABASE_URL }}" ]; then
+            echo "VITE_SUPABASE_URL=${{ vars.VITE_SUPABASE_URL }}" >> $GITHUB_ENV
+          fi
+          if [ -z "${VITE_SUPABASE_ANON_KEY}" ] && [ -n "${{ vars.VITE_SUPABASE_ANON_KEY }}" ]; then
+            echo "VITE_SUPABASE_ANON_KEY=${{ vars.VITE_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
+          fi
+
+      - name: Check Supabase env
+        run: |
+          if [ -z "${VITE_SUPABASE_URL}" ] || [ -z "${VITE_SUPABASE_ANON_KEY}" ]; then
+            echo "AVERTISSEMENT: VITE_SUPABASE_URL ou VITE_SUPABASE_ANON_KEY manquant(s). L'app utilisera le fallback local."
+          else
+            echo "Variables VITE_SUPABASE_* présentes."
+          fi
 
       - name: Install dependencies (clean)
         run: |
           npm ci
 
       - name: Build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: |
           echo "Node version during build:" && node -v
           echo "NPM version during build:" && npm -v
