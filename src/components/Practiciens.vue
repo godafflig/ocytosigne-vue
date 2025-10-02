@@ -56,7 +56,7 @@
             />
           </div>
           <div class="praticien-info">
-            <p>{{ practitioner.specialty }}</p>
+            <p>{{ Array.isArray(practitioner.specialties) ? practitioner.specialties.join(', ') : practitioner.specialties }}</p>
             <h3>{{ practitioner.name }}</h3>
             <p style="color: #e65100; font-weight: 600">
               {{ practitioner.lsfLevel }}
@@ -74,7 +74,11 @@
             <i class="fa-solid fa-star"></i> {{ practitioner.rating }} ({{ practitioner.reviews }} avis)
           </p>
           <p class="info">
-            <i class="fa-solid fa-location-dot"></i> {{ practitioner.location }}
+            <i class="fa-solid fa-location-dot"></i> {{ practitioner.addressText || practitioner.location }}
+          </p>
+          <p v-if="practitioner.phone" class="info">
+            <i class="fa-solid fa-phone"></i>
+            <a :href="`tel:${practitioner.phone}`">{{ practitioner.phone }}</a>
           </p>
           <p class="info availability">
             <i class="fa-solid fa-circle-check"></i>
@@ -89,6 +93,10 @@
         <div class="actions">
           <button><i class="fa-solid fa-video"></i> Vidéo LSF</button>
           <button>Profil complet</button>
+        </div>
+
+        <div class="badges" style="padding-top:0">
+          <span v-for="ct in practitioner.consultTypes" :key="`ct-${ct}`" class="badge" style="background:#2c3e50">{{ ct }}</span>
         </div>
       </div>
     </div>
@@ -193,28 +201,50 @@ const fetchPractitioners = async () => {
     if (!supabase) {
       throw new Error('Supabase non configuré')
     }
-    const { data, error: supabaseError } = await supabase
-      .from('praticiens')
-      .select('*')
-      .order('name')
+    // Utilise une Edge Function pour agréger les données (join profiles)
+    const { data: fnData, error: fnError } = await supabase.functions.invoke('get_practitioner', {
+      body: { limit: 30 }
+    })
 
-    if (supabaseError) {
-      throw supabaseError
+    if (fnError) {
+      throw fnError
     }
 
-    practitioners.value = data.map(practitioner => ({
-      id: practitioner.id,
-      name: practitioner.name,
-      specialty: practitioner.specialty,
-      video: practitioner.video_url,
-      rating: practitioner.rating,
-      reviews: practitioner.reviews_count,
-      location: practitioner.location,
-      availability: practitioner.availability,
-      lsfLevel: practitioner.lsf_level,
-      image: practitioner.image_url,
-      badges: practitioner.badges || []
-    }))
+    const rows = fnData?.data || []
+
+    practitioners.value = rows.map((row) => {
+      const p = row || {}
+      const prof = p.profiles || {}
+      const fullName = prof.firstname && prof.lastname ? `${prof.firstname} ${prof.lastname}` : 'Praticien'
+      const specialties = Array.isArray(p.specialty) ? p.specialty : (p.specialty ? [p.specialty] : [])
+      const consultTypes = Array.isArray(p.consult_type) ? p.consult_type : (p.consult_type ? [p.consult_type] : [])
+      const comModes = Array.isArray(prof.com_mod) ? prof.com_mod : (prof.com_mod ? [prof.com_mod] : [])
+      const address = p.address || {}
+      const formattedAddress = [address.number, address.street, address.postal_code, address.city, address.country]
+        .filter(Boolean)
+        .join(' ')
+      return {
+        id: p.id,
+        name: fullName,
+        specialties,
+        consultTypes,
+        services: p.services || '',
+        formation: p.formation || '',
+        experience: typeof p.experience === 'number' ? p.experience : null,
+        video: null,
+        rating: typeof p.rating === 'number' ? Number(p.rating) : 0,
+        reviews: 0,
+        address,
+        addressText: formattedAddress,
+        location: address.city || '',
+        availability: '—',
+        comModes,
+        lsfLevel: comModes.join(', '),
+        image: prof.avatar_url || '',
+        phone: prof.phone || '',
+        badges: specialties
+      }
+    })
   } catch (err) {
     console.error('Erreur lors du chargement des praticiens:', err)
     error.value = err.message
