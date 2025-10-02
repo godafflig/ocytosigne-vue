@@ -30,7 +30,7 @@ body {
     line-height: 1.6;
     color: #2d3748;
     font-size: 16px;
-    background-color: #ffffff;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
@@ -82,7 +82,7 @@ video {
 }
 
 .video {
-    background-color: #ffffff;
+    background-color: #f8f9fa;
     text-align: center;
 }
 
