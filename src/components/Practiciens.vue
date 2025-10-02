@@ -190,6 +190,9 @@ const error = ref(null)
 const fetchPractitioners = async () => {
   try {
     loading.value = true
+    if (!supabase) {
+      throw new Error('Supabase non configuré')
+    }
     const { data, error: supabaseError } = await supabase
       .from('praticiens')
       .select('*')
@@ -285,9 +288,9 @@ onMounted(() => {
 
 .filter-btn {
   padding: 10px 20px;
-  border: 2px solid #e74c3c;
+  border: 2px solid #f97823;
   background: white;
-  color: #e74c3c;
+  color: #f97823;
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -296,7 +299,7 @@ onMounted(() => {
 
 .filter-btn.active,
 .filter-btn:hover {
-  background: #e74c3c;
+  background: #f97823;
   color: white;
 }
 
@@ -319,7 +322,7 @@ onMounted(() => {
 }
 
 .error-message {
-  color: #e74c3c;
+  color: #f97823;
   font-weight: bold;
   margin: 10px 0;
 }
@@ -378,7 +381,7 @@ onMounted(() => {
 }
 
 .badge {
-  background: #e74c3c;
+  background: #f97823;
   color: white;
   padding: 5px 12px;
   border-radius: 20px;
@@ -400,7 +403,7 @@ onMounted(() => {
 }
 
 .info i {
-  color: #e74c3c;
+  color: #f97823;
   width: 16px;
 }
 
@@ -418,7 +421,7 @@ onMounted(() => {
   width: calc(100% - 40px);
   margin: 15px 20px;
   padding: 12px;
-  background: #e74c3c;
+  background: #f97823;
   color: white;
   border: none;
   border-radius: 8px;
@@ -451,7 +454,7 @@ onMounted(() => {
 
 .actions button:hover {
   background: #f8f9fa;
-  border-color: #e74c3c;
+  border-color: #f97823;
 }
 
 .modal {
@@ -491,7 +494,7 @@ onMounted(() => {
 }
 
 .close:hover {
-  color: #e74c3c;
+  color: #f97823;
 }
 
 .modal-praticien {
@@ -525,9 +528,9 @@ onMounted(() => {
   width: 100%;
   padding: 12px;
   margin-bottom: 10px;
-  border: 2px solid #e74c3c;
+  border: 2px solid #f97823;
   background: white;
-  color: #e74c3c;
+  color: #f97823;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -536,7 +539,7 @@ onMounted(() => {
 
 .option-btn.active,
 .option-btn:hover {
-  background: #e74c3c;
+  background: #f97823;
   color: white;
 }
 
@@ -562,9 +565,9 @@ onMounted(() => {
 .date-btn.active,
 .date-btn:hover,
 .slot-btn:hover {
-  background: #e74c3c;
+  background: #f97823;
   color: white;
-  border-color: #e74c3c;
+  border-color: #f97823;
 }
 
 .note {
@@ -598,7 +601,7 @@ onMounted(() => {
 }
 
 .cta-btn {
-  background: #e74c3c;
+  background: #f97823;
   color: white;
   padding: 15px 30px;
   border: none;
