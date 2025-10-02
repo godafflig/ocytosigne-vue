@@ -181,6 +181,8 @@
     <div class="cta">
       <p>Plus de 500 praticiens certifiés LSF dans toute la France</p>
       <button class="cta-btn">Voir tous les praticiens</button>
+      <p></p>
+      <a href="https://ocytosigne.ericmai.fr/" class="cta-btn">je suis praticien et je souhaite m'inscrire</a>
     </div>
   </section>
 </template>

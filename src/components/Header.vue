@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <span class="urg-text">Urgence 24h</span>
           </button>
 
-          <button class="nav-login" id="nav-login" aria-label="Se connecter">
+          <a href="https://ocytosigne.ericmai.fr/" class="nav-login" id="nav-login" aria-label="Se connecter">
             <span class="login-icon">
               <img
                 src="../assets/profile.png"
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
               />
             </span>
             <span class="login-text">Connexion</span>
-          </button>
+          </a>
 
           <!-- Burger menu (mobile seulement) -->
           <button
