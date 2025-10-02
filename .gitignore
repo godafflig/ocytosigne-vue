@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environnements (ne pas commiter les secrets)
+.env
+.env.*

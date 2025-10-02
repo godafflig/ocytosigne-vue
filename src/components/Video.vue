@@ -9,7 +9,7 @@
     <div class="video">
       <video controls aria-label="Vidéo de présentation en LSF">
         <source
-          src="../../src/assets/bonjour_LSF.mp4"
+          src="../assets/bonjour_LSF.mp4"
           type="video/mp4"
           alt="Vidéo de présentation en LSF"
         />

@@ -8,7 +8,7 @@
     <div class="footer-top" role="region" aria-label="Présentation">
       <div class="footer-brand">
         <img
-          src="../../src/assets/logo.png"
+          src="../assets/logo.png"
           alt="Logo Ocytosigne"
           class="footer-logo"
         />
@@ -28,7 +28,7 @@
           aria-label="Service 100% LSF"
         >
           <img
-            src="../../src/assets/logo.png"
+            src="../assets/logo.png"
             alt="Logo Ocytosigne"
             aria-hidden="true"
             class="footer-icon"
@@ -41,7 +41,7 @@
           aria-label="Service 100% LSF"
         >
           <img
-            src="../../src/assets/logo.png"
+            src="../assets/logo.png"
             alt="Logo Ocytosigne"
             aria-hidden="true"
             class="footer-icon"
@@ -83,7 +83,7 @@
         <li role="listitem">
           <span class="footer-contact-icon" aria-hidden="true">
             <img
-              src="../../src/assets/phone-orange.png"
+              src="../assets/phone-orange.png"
               alt="Icône téléphone"
               aria-hidden="true"
               class="nav-logo"
@@ -94,7 +94,7 @@
         <li role="listitem">
           <span class="footer-contact-icon" aria-hidden="true">
             <img
-              src="../../src/assets/mail.png"
+              src="../assets/mail.png"
               alt="Icône mail"
               aria-hidden="true"
               class="nav-logo"
@@ -105,7 +105,7 @@
         <li role="listitem">
           <span class="footer-contact-icon" aria-hidden="true">
             <img
-              src="../../src/assets/map.png"
+              src="../assets/map.png"
               alt="Icône carte"
               aria-hidden="true"
               class="nav-logo"

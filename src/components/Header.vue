@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <!-- Section gauche: Logo et titre -->
         <div class="nav-left" aria-label="Identité du site">
           <img
-            src="../../src/assets/logo.png"
+            src="../assets/logo.png"
             alt="Logo Ocytosigne"
             class="nav-logo"
           />
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="nav-urg" id="nav-urg" aria-label="Urgence 24h">
             <span class="urg-icon">
               <img
-                src="../../src/assets/phone.png"
+                src="../assets/phone.png"
                 alt=""
                 aria-hidden="true"
                 class="nav-logo"
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="nav-login" id="nav-login" aria-label="Se connecter">
             <span class="login-icon">
               <img
-                src="../../../src/assets/profile.png"
+                src="../assets/profile.png"
                 alt=""
                 aria-hidden="true"
                 class="nav-logo"
